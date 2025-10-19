@@ -1,0 +1,28 @@
+name: 🚀 Auto Deploy to Hostinger (AIVANA ToDoList)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js (optional for builds)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: 🔑 Upload via FTP to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ftp.todolist.barkataiautomation.in
+          username: todolistaiautomation
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /public_html/
+          dangerous-clean-slate: true
