@@ -1,0 +1,16 @@
+{
+  "package_name": "AIVANA_AI_Website_2025",
+  "version": "1.0.0",
+  "created_by": "Aivana Technologies",
+  "release_date": "2025-10-13",
+  "files": [
+    {
+      "name": "AIVANA_AI_Global_Identity_Guide_English.pdf",
+      "path": "guides/AIVANA_AI_Global_Identity_Guide_English.pdf"
+    },
+    {
+      "name": "AIVANA_AI_Global_Identity_Guide_Hindi.pdf",
+      "path": "guides/AIVANA_AI_Global_Identity_Guide_Hindi.pdf"
+    }
+  ]
+}
