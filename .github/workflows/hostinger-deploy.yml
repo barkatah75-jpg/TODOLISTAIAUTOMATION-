@@ -21,8 +21,8 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ftp.todolist.barkataiautomation.in
-          username: todolistaiautomation
+          username: u786522790.todolistaiautomation
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
           local-dir: ./
-          server-dir: /public_html/
+          server-dir: /home/u786522790/domains/todolist.barkataiautomation.in/public_html
           dangerous-clean-slate: true
