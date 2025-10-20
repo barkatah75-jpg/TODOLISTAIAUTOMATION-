@@ -1,4 +1,3 @@
-
 name: 🚀 Auto Deploy to Hostinger (AIVANA ToDoList)
 
 on:
@@ -13,15 +12,18 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🔑 Deploy via FTP to Hostinger
+      - name: 🔑 Deploy via Secure FTPS to Hostinger
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ftp.todolist.barkataiautomation.in
           username: u786522790.todolistaiautomation
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
           local-dir: ./
           server-dir: /domains/todolist.barkataiautomation.in/public_html/
           log-level: verbose
+          security: strict
           exclude: |
             **/.git*
             **/.github*
