@@ -1,0 +1,47 @@
+name: 🔁 AIVANA Auto Verify & Redeploy (Hostinger)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  verify-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📂 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🧠 Verify essential files exist
+        run: |
+          if [ ! -f "index.html" ]; then echo "❌ index.html missing"; exit 1; fi
+          if [ ! -d "assets" ]; then echo "❌ assets folder missing"; exit 1; fi
+          if [ ! -d "guides" ]; then echo "❌ guides folder missing"; exit 1; fi
+          echo "✅ All required files are present."
+
+      - name: 🧩 Check Features section in index.html
+        run: |
+          if grep -q "Features" index.html; then
+            echo "✅ Features section detected."
+          else
+            echo "❌ Features section missing."; exit 1;
+          fi
+
+      - name: 🚀 Deploy via Secure FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ftp.todolist.barkataiautomation.in
+          username: u786522790.todolistaiautomation
+          password: ${{ secrets.HOSTINGER_FTP_PASS }}
+          protocol: ftps
+          port: 21
+          local-dir: ./
+          server-dir: /home/u786522790/domains/todolist.barkataiautomation.in/public_html/
+          timeout: 60000
+
+      - name: ✅ Confirm Deployment
+        run: |
+          echo "🌐 Checking live site..."
+          curl -s https://todolist.barkataiautomation.in | grep -q "Features" && echo "✅ Features visible on live site!" || echo "❌ Features not found on live site."
