@@ -1,0 +1,34 @@
+﻿name: 🚀 AIVANA Auto Upload to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Prepare Files
+        run: |
+          echo "Options -Indexes" > .htaccess
+          echo "DirectoryIndex index.html" >> .htaccess
+          echo "ErrorDocument 403 /index.html" >> .htaccess
+          echo "ErrorDocument 404 /index.html" >> .htaccess
+          echo "RewriteEngine On" >> .htaccess
+          echo "RewriteCond %{HTTPS} off" >> .htaccess
+          echo "RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]" >> .htaccess
+          echo "<!doctype html><html><head><title>AIVANA ToDo Aurora</title><style>body{margin:0;font-family:sans-serif;background:radial-gradient(circle at top,#0f0c29,#302b63,#24243e);display:flex;align-items:center;justify-content:center;height:100vh;color:#00ffff;text-shadow:0 0 20px #00ffff;font-size:28px;letter-spacing:1px;}</style></head><body>⚡ AIVANA ToDo Automation System Online 🌌</body></html>" > index.html
+
+      - name: Upload to Hostinger via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.HOSTINGER_FTP_SERVER }}
+          username: ${{ secrets.HOSTINGER_FTP_USERNAME }}
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /domains/todolist.barkataiautomation.in/public_html/
+          protocol: ftps
