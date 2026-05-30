@@ -1,0 +1,28 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily",
+      "schedule": "30 14 * * *"
+    }
+  ],
+  "functions": {
+    "app/api/ai/chat/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/ocr/scan/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/pdf/compress/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/story/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/adaptive/route.ts": {
+      "maxDuration": 20
+    },
+    "app/api/cron/daily/route.ts": {
+      "maxDuration": 300
+    }
+  }
+}
