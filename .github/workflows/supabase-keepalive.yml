@@ -17,13 +17,14 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase REST endpoint
+      - name: Ping Supabase health endpoint
         run: |
-          URL="https://sbknuiqxqkbnvdpfoikt.supabase.co/rest/v1/"
+          # /auth/v1/health returns 200 with just the apikey header — no RLS and
+          # no service_role needed — while still registering activity on the project.
+          URL="https://sbknuiqxqkbnvdpfoikt.supabase.co/auth/v1/health"
           ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNia251aXF4cWtibnZkcGZvaWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2OTg4MzAsImV4cCI6MjA5ODI3NDgzMH0.0ghe2VflVJ3XfAaSm2a0aKFofUDcpC4M-eaYh2lLQRE"
           CODE=$(curl -s -o /dev/null -w "%{http_code}" \
             -H "apikey: $ANON" \
-            -H "Authorization: Bearer $ANON" \
             "$URL")
           echo "Supabase responded with HTTP $CODE"
           if [ "$CODE" != "200" ]; then
