@@ -1,0 +1,33 @@
+name: 🟢 Supabase Keepalive (UCS dashboard)
+
+# Prevents the free-tier UCS Supabase project (sbknuiqxqkbnvdpfoikt) from being
+# auto-paused after 7 days of inactivity. Pings the REST API on a schedule so the
+# project keeps registering database activity.
+#
+# The apikey below is the PUBLIC anon key — it is designed to be shipped in
+# client bundles and is protected by Row Level Security. It is safe to commit.
+
+on:
+  schedule:
+    # Every 2 days at 06:00 UTC (well under the 7-day inactivity window)
+    - cron: "0 6 */2 * *"
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST endpoint
+        run: |
+          URL="https://sbknuiqxqkbnvdpfoikt.supabase.co/rest/v1/"
+          ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNia251aXF4cWtibnZkcGZvaWt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2OTg4MzAsImV4cCI6MjA5ODI3NDgzMH0.0ghe2VflVJ3XfAaSm2a0aKFofUDcpC4M-eaYh2lLQRE"
+          CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: $ANON" \
+            -H "Authorization: Bearer $ANON" \
+            "$URL")
+          echo "Supabase responded with HTTP $CODE"
+          if [ "$CODE" != "200" ]; then
+            echo "::error::Unexpected status $CODE — project may be paused or key rotated"
+            exit 1
+          fi
+          echo "✅ Keepalive ping successful — inactivity timer reset"
